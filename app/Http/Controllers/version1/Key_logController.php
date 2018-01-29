@@ -49,7 +49,7 @@ class Key_logController extends Controller
 
     }
 
-    public function KeylogTransfom($key_logs,$guests,$users)
+    public function KeylogTransfom1($key_logs,$guests,$users)
     {
       $tmp = array();
 
@@ -65,13 +65,34 @@ class Key_logController extends Controller
             "type" 			=> $value->type,
             "key_in"			=> $value->key_in,
             "key_out"			=> $value->key_out,
-            "guests"			=> new GuestCollection($guests),
+            "guests"			=> [],
             "users"			=> new UserCollection($users),
         ];
     }
     return $tmp;
 }
+  public function KeylogTransfom($key_logs,$guests,$users)
+    {
+      $tmp = array();
 
+      foreach ($key_logs as $value) {
+
+        $tmp = [
+
+            "id"          => $value->id,
+            "user_id"       => $value->user_id,
+            "guest_id"    => $value->guest_id,
+            "park"      => $value->park,
+            "plot_number"   => $value->plot_number,
+            "type"      => $value->type,
+            "key_in"      => $value->key_in,
+            "key_out"     => $value->key_out,
+            "guests"      => new GuestCollection($guests),
+            "users"     => new UserCollection($users),
+        ];
+    }
+    return $tmp;
+}
 
     /*
     // when we required data 
@@ -133,19 +154,7 @@ public function index(Request $request)
 
    $key_logs 	= $this->keylog::Where('user_id' ,'=', $user_id)->paginate(2);
 
-   $guests 	= Guest::where('user_id','=',$user_id)->first();
-
-
-
-   $response1 = [
-
-    		//"Key_log" => Key_logResource::collection($key_logs,$guests),
-      "Key_log" => $this->KeylogTransfom($key_logs,$guests,$user),
-    		//"guests"  => $guests,
-    		//"user"    => $user,
-  ];
-
-  if($key_logs->isEmpty())
+  if($key_logs == '')
   {
       $response = [
 
@@ -160,6 +169,40 @@ public function index(Request $request)
 
 }else{
 
+   $guests  = Guest::where('user_id','=',$user_id)->first();
+
+   if($guests == '')
+   {
+    $response1 = [
+
+        //"Key_log" => Key_logResource::collection($key_logs,$guests),
+      "Key_log" => $this->KeylogTransfom1($key_logs,$guests,$user),
+        //"guests"  => $guests,
+        //"user"    => $user,
+  ];
+
+  $response = [
+
+    "status"    => Response::HTTP_OK,
+    "result"    => true,
+    "error"     => false,
+    "message"   => "List of Keylogs appointed by you.",
+    "data"      => $response1,
+    "pagination"  => $this->transform($key_logs)
+];
+
+return response()->json($response,  Response::HTTP_OK);
+
+   }else{
+
+   $response1 = [
+
+        //"Key_log" => Key_logResource::collection($key_logs,$guests),
+      "Key_log" => $this->KeylogTransfom($key_logs,$guests,$user),
+        //"guests"  => $guests,
+        //"user"    => $user,
+  ];
+
   $response = [
 
     "status" 		=> Response::HTTP_OK,
@@ -171,6 +214,7 @@ public function index(Request $request)
 ];
 
 return response()->json($response,  Response::HTTP_OK);
+}
 }
 }
 
