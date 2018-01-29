@@ -186,7 +186,7 @@ public function index(Request $request)
     "status"    => Response::HTTP_OK,
     "result"    => true,
     "error"     => false,
-    "message"   => "List of Keylogs appointed by you.",
+    "message"   => "List of Keylogs appointed by you..",
     "data"      => $response1,
     "pagination"  => $this->transform($key_logs)
 ];
