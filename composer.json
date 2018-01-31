@@ -12,6 +12,7 @@
         "laravel/tinker": "~1.0",
         "league/fractal": "^0.17.0",
         "mpociot/laravel-apidoc-generator": "^2.0",
+        "stevebauman/location": "^2.0",
         "tymon/jwt-auth": "^0.5.12"
     },
     "require-dev": {

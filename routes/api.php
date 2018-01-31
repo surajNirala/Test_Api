@@ -52,6 +52,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
        // Route::get('key-logs/get-all', 'version1\Key_logController@get_all');
     });
 
+    Route::get('location',function(){
+    $ip= \Request::ip();
+    $data = \Location::get($ip);
+    dd($data);
+});
+
+
 
 /*Route::get('v1/guests', 'version1\GuestController@index');
 Route::get('v1/guests/get-all', 'version1\GuestController@get_all');
